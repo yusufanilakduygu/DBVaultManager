@@ -1,0 +1,113 @@
+***** APEX 20.2  DBVAULT sistemi   ******
+
+
+Sistem Açılışı   *********************************************
+
+sqlplus / as sysdba
+
+startup
+
+lsnrctl start
+
+alter system register
+
+sh ord_start.sh
+
+log dosyasını incele hata varmı diye 
+
+**********************************************************
+
+
+IP:  192.168.56.105
+Hostname : ol7-183.localdomain
+Single Instance
+root / adana147
+oracle / adana147
+ sys --->  oracle
+system --> oracle123
+DB Name: db1 : 18.3.0.0.0
+
+DB açıldıktıktan sonra;  Listener açılma işlemi
+
+$ lsnrctl start
+sqlplus > alter system register
+
+DB ye bağlanmak için tns
+
+DB1 =
+ (DESCRIPTION =
+   (ADDRESS_LIST =
+     (ADDRESS = (PROTOCOL = TCP)(Host = 192.168.56.105)(Port = 1521))
+   )
+ (CONNECT_DATA =
+   (SERVICE_NAME = DB1.localdomain)
+ )
+)
+
+
+APEX INFO
+
+Administration
+
+http://192.168.56.105:8080/ords/apex_admin
+
+APEX: Admin : ADMIN
+Admin password : Mersin#147
+
+
+-------------------------------
+
+Workspace 
+
+http://192.168.56.105:8080/ords
+
+-------------------------------------------------
+
+W1
+W1_ADMIN
+Mersin#147
+
+Database Username : w1 password : Mersin#147
+
+----------------------------------------------------------------
+
+Workspace NAme : W_DBVAULT
+Admin : ADMIN_DBVAULT
+Administrator Password : Mersin#147
+
+Database Username : w_dbvault,  password : Adana#147
+
+
+------------------------------------------
+
+DB vault uygulaması
+
+https://192.168.56.105:8443/ords/f?p=103
+
+
+--------------------------------------
+
+To start it
+
+
+vi ord_start.sh
+
+export PATH=/usr/sbin:/usr/local/bin:/usr/bin:/usr/local/sbin:$PATH
+LOGFILE=/home/oracle/ord_logs/ords-`date +"%Y""%m""%d"`.log
+cd /u01/app/oracle/ords
+nohup java ${JAVA_OPTIONS} -jar ords.war standalone >> $LOGFILE 2>&1 &
+echo "View log file with : tail -f $LOGFILE"
+
+sh ord_start.sh
+
+To stop
+
+ps -ef | grep ord
+
+-bash-4.2$ ps -ef | grep ord
+colord    2024     1  0 11:11 ?        00:00:00 /usr/libexec/colord
+root      2205  1761  0 11:12 ?        00:00:00 gdm-session-worker [pam/gdm-password]
+oracle   27271     1 34 17:07 pts/0    00:00:34 java -Dorg.eclipse.jetty.server.Request.maxFormContentSize=3000000 -jar ords.war standalone
+oracle   27428  4976  0 17:09 pts/0    00:00:00 grep --color=auto ord
+
+kill 27271
